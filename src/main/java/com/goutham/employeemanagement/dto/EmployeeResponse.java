@@ -5,10 +5,10 @@ import lombok.Getter;
 @Getter
 public class EmployeeResponse {
 
-    private Long id;
-    private String name;
-    private String email;
-    private String department;
+    private final Long id;
+    private final String name;
+    private final String email;
+    private final String department;
 
     public EmployeeResponse(Long id , String name, String email, String department) {
         this.id = id;
