@@ -32,7 +32,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<EmployeeResponse> createEmployee(@Valid  @RequestBody EmployeeRequest employee){
+    public ResponseEntity<EmployeeResponse> createEmployee(@Valid @RequestBody EmployeeRequest employee){
         EmployeeResponse response = employeeService.createEmployee(employee);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
