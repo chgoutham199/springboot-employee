@@ -1,6 +1,7 @@
 package com.goutham.employeemanagement.service;
 
 import com.goutham.employeemanagement.dto.EmployeeRequest;
+import com.goutham.employeemanagement.dto.EmployeeResponse;
 import com.goutham.employeemanagement.entity.Employee;
 import com.goutham.employeemanagement.exception.ResourceNotFoundException;
 import com.goutham.employeemanagement.repository.EmployeeRepository;
@@ -18,38 +19,56 @@ public class EmployeeService {
         this.employeeRepository = employeeRepository;
     }
 
-    public List<Employee> getAllEmployees(){
-        return employeeRepository.findAll();
+    public List<EmployeeResponse> getAllEmployees(){
+        return employeeRepository.findAll()
+                .stream()
+                .map(this::convertToResponse)
+                .toList();
     }
 
-    public Employee getEmployee(Long id){
-        return  employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+    public EmployeeResponse getEmployee(Long id){
+        Employee employee = getEmployeeEntityOrThrow(id);
+
+        return  convertToResponse(employee);
     }
 
-    public Employee createEmployee(EmployeeRequest employee){
+    public EmployeeResponse createEmployee(EmployeeRequest employee){
         Employee emp = new Employee();
         emp.setName(employee.getName());
         emp.setDepartment(employee.getDepartment());
         emp.setEmail(employee.getEmail());
-        return employeeRepository.save(emp);
+
+        return convertToResponse(employeeRepository.save(emp));
     }
 
-    public Employee updateEmployee(Long id,EmployeeRequest employee){
+    public EmployeeResponse updateEmployee(Long id,EmployeeRequest employee){
 
-         Employee existingEmployee =  getEmployee(id);
+         Employee existingEmployee = getEmployeeEntityOrThrow(id);
          existingEmployee.setName(employee.getName());
          existingEmployee.setEmail(employee.getEmail());
          existingEmployee.setDepartment(employee.getDepartment());
-         return employeeRepository.save(existingEmployee);
+         return convertToResponse(employeeRepository.save(existingEmployee));
 
     }
 
 
     public void  deleteEmployee(Long id ){
-        Employee existingEmployee =  getEmployee(id);
+        Employee existingEmployee = getEmployeeEntityOrThrow(id);
         employeeRepository.delete(existingEmployee);
     }
 
+    private Employee getEmployeeEntityOrThrow(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+    }
+
+    private EmployeeResponse convertToResponse(Employee employee){
+        return new EmployeeResponse(
+                employee.getId(),
+                employee.getName(),
+                employee.getEmail(),
+                employee.getDepartment()
+        );
+    }
 
 }
