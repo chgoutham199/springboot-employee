@@ -1,7 +1,7 @@
 package com.goutham.employeemanagement.controller;
 
 import com.goutham.employeemanagement.dto.EmployeeRequest;
-import com.goutham.employeemanagement.entity.Employee;
+import com.goutham.employeemanagement.dto.EmployeeResponse;
 import com.goutham.employeemanagement.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -20,22 +20,22 @@ public class EmployeeController {
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees(){
+    public List<EmployeeResponse> getAllEmployees(){
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployee(@PathVariable Long id){
+    public EmployeeResponse getEmployee(@PathVariable Long id){
         return  employeeService.getEmployee(id);
     }
 
     @PostMapping
-    public Employee createEmployee(@Valid  @RequestBody EmployeeRequest employee){
+    public EmployeeResponse createEmployee(@Valid  @RequestBody EmployeeRequest employee){
         return employeeService.createEmployee(employee);
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeRequest employee){
+    public EmployeeResponse updateEmployee(@PathVariable Long id,@Valid @RequestBody EmployeeRequest employee){
         return employeeService.updateEmployee(id,employee);
     }
 
