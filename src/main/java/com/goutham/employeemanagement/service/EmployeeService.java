@@ -1,5 +1,6 @@
 package com.goutham.employeemanagement.service;
 
+import com.goutham.employeemanagement.dto.EmployeeRequest;
 import com.goutham.employeemanagement.entity.Employee;
 import com.goutham.employeemanagement.exception.ResourceNotFoundException;
 import com.goutham.employeemanagement.repository.EmployeeRepository;
@@ -26,11 +27,15 @@ public class EmployeeService {
                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
-    public Employee createEmployee(Employee employee){
-        return employeeRepository.save(employee);
+    public Employee createEmployee(EmployeeRequest employee){
+        Employee emp = new Employee();
+        emp.setName(employee.getName());
+        emp.setDepartment(employee.getDepartment());
+        emp.setEmail(employee.getEmail());
+        return employeeRepository.save(emp);
     }
 
-    public Employee updateEmployee(Long id,Employee employee){
+    public Employee updateEmployee(Long id,EmployeeRequest employee){
 
          Employee existingEmployee =  getEmployee(id);
          existingEmployee.setName(employee.getName());
