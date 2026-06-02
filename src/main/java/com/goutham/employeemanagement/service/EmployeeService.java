@@ -1,6 +1,7 @@
 package com.goutham.employeemanagement.service;
 
 import com.goutham.employeemanagement.entity.Employee;
+import com.goutham.employeemanagement.exception.ResourceNotFoundException;
 import com.goutham.employeemanagement.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class EmployeeService {
 
     public Employee getEmployee(Long id){
         return  employeeRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Employee not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
     public Employee createEmployee(Employee employee){
@@ -44,7 +45,6 @@ public class EmployeeService {
         Employee existingEmployee =  getEmployee(id);
         employeeRepository.delete(existingEmployee);
     }
-
 
 
 }
