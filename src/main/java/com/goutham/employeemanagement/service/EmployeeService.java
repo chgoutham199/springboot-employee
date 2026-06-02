@@ -27,8 +27,7 @@ public class EmployeeService {
     }
 
     public EmployeeResponse getEmployee(Long id){
-        Employee employee =  employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+        Employee employee = getEmployeeEntityOrThrow(id);
 
         return  convertToResponse(employee);
     }
@@ -44,8 +43,7 @@ public class EmployeeService {
 
     public EmployeeResponse updateEmployee(Long id,EmployeeRequest employee){
 
-         Employee existingEmployee = employeeRepository.findById(id)
-                 .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+         Employee existingEmployee = getEmployeeEntityOrThrow(id);
          existingEmployee.setName(employee.getName());
          existingEmployee.setEmail(employee.getEmail());
          existingEmployee.setDepartment(employee.getDepartment());
@@ -55,9 +53,13 @@ public class EmployeeService {
 
 
     public void  deleteEmployee(Long id ){
-        Employee existingEmployee = employeeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
+        Employee existingEmployee = getEmployeeEntityOrThrow(id);
         employeeRepository.delete(existingEmployee);
+    }
+
+    private Employee getEmployeeEntityOrThrow(Long id) {
+        return employeeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
     }
 
     private EmployeeResponse convertToResponse(Employee employee){
