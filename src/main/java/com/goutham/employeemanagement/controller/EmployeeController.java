@@ -4,6 +4,8 @@ import com.goutham.employeemanagement.dto.EmployeeRequest;
 import com.goutham.employeemanagement.dto.EmployeeResponse;
 import com.goutham.employeemanagement.service.EmployeeService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,8 +32,9 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public EmployeeResponse createEmployee(@Valid  @RequestBody EmployeeRequest employee){
-        return employeeService.createEmployee(employee);
+    public ResponseEntity<EmployeeResponse> createEmployee(@Valid  @RequestBody EmployeeRequest employee){
+        EmployeeResponse response = employeeService.createEmployee(employee);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PutMapping("/{id}")
@@ -40,8 +43,9 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    public  void  deleteEmployee(@PathVariable Long id ){
+    public  ResponseEntity<Void>  deleteEmployee(@PathVariable Long id ){
         employeeService.deleteEmployee(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }
