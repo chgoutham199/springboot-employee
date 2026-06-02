@@ -60,7 +60,7 @@ public class EmployeeService {
         employeeRepository.delete(existingEmployee);
     }
 
-    public EmployeeResponse convertToResponse(Employee employee){
+    private EmployeeResponse convertToResponse(Employee employee){
         return new EmployeeResponse(
                 employee.getId(),
                 employee.getName(),
